@@ -1,0 +1,27 @@
+button{
+    margin-right: 10px;
+    margin-left: 30px;
+}
+body{
+    background-color: #273746;
+}
+.jumbotron{
+    text-align: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+h1{
+    font-size: 60px;
+    font-weight: bold;
+}
+#hero-form{
+    padding-left: 20px;
+    color: white;
+    margin-bottom: 40px;
+}
+input{
+    margin-left: 10px;
+}
+#add-hero{
+    margin-top: 20px;
+}

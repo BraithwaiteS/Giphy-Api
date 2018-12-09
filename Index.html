@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    </head>
+        <body>
+            <div class="jumbotron">
+                <div class="container">
+                    <h1 class="head">SUPERHEROES</h1>
+                    <p class="sub">Type in a superhero.</p>
+                </div>
+            </div>
+
+            <form id="hero-form">
+                <label for="hero-input">Add a Hero!</label>
+                <input type="text" id="hero-input">
+
+                <input id="add-hero" type="submit" value="Add a Hero!">
+            </form>
+            
+            <div id="buttons"></div>
+
+            <div id="images"></div>
+               
+
+            <div id="gifs-appear-here"></div>
+        
+            
+            <script type="text/javascript">
+
+            var topics = ['spiderman', 'hulk', 'superman', 'batman', 'wonderwoman'];
+
+            
+            //shows previouse and adds buttons 
+            function renderButtons(){
+                
+            $("#buttons").empty();
+
+                for (var i = 0; i < topics.length; i++) {
+
+                var heroes = $("<button>");
+
+                heroes.addClass("hero");
+
+                heroes.attr("data-name", topics[i]);
+
+                heroes.text(topics[i]);
+
+                $("#buttons").append(heroes);
+                    
+                    console.log(topics[i]);
+                }
+            }
+
+            $("#add-hero").on("click", function(event) {
+                    
+                event.preventDefault();
+
+                var newHeroes = $("#hero-input").val().trim();
+
+                topics.push(newHeroes);
+               
+                renderButtons();
+                    
+
+            var queryURL = 'http://api.giphy.com/v1/gifs/search?q=' + newHeroes + '&api_key=iTG3uUkrcD9SA0Jz6CDU7Ape6mf93ets&limit=10';
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                })
+
+            .then(function(response){
+                        
+                console.log(response);
+
+                var image = response.data;
+
+                var heroImage = $("<img>");
+
+                heroImage.attr("src", image);
+                        
+                heroImage.attr("alt", "heroes");
+
+                $("#gifs-appear-here").prepend(heroImage);
+            });
+
+            });
+                
+                renderButtons();
+            </script>
+        </body>
+</html>
