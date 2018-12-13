@@ -1,6 +1,8 @@
 <!DOCTYPE html>
     <head>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
     </head>
@@ -29,6 +31,16 @@
             
             <script type="text/javascript">
 
+            var config = {
+                apiKey: "AIzaSyALoGdidCqjmjdq0Nyl_djW83Lzu26RlT0",
+                authDomain: "giphy-project-d3bf7.firebaseapp.com",
+                databaseURL: "https://giphy-project-d3bf7.firebaseio.com",
+                projectId: "giphy-project-d3bf7",
+                storageBucket: "giphy-project-d3bf7.appspot.com",
+                messagingSenderId: "7531952831"
+            };
+                firebase.initializeApp(config);
+
             var topics = ['spiderman', 'hulk', 'superman', 'batman', 'wonderwoman'];
 
             
@@ -56,7 +68,7 @@
             $("#add-hero").on("click", function(event) {
                     
                 event.preventDefault();
-
+                console.log("add hero clicked")
                 var newHeroes = $("#hero-input").val().trim();
 
                 topics.push(newHeroes);
@@ -64,31 +76,61 @@
                 renderButtons();
                     
 
-            var queryURL = 'http://api.giphy.com/v1/gifs/search?q=' + newHeroes + '&api_key=iTG3uUkrcD9SA0Jz6CDU7Ape6mf93ets&limit=10';
+       
 
-                $.ajax({
+            });
+
+            $(document).on("click", ".hero", function(){
+                var heroName= $(this).attr("data-name")
+                console.log("hero name is : " + heroName)
+
+                    var queryURL = 'http://api.giphy.com/v1/gifs/search?q=' + heroName + '&api_key=iTG3uUkrcD9SA0Jz6CDU7Ape6mf93ets&limit=10';
+
+                    $.ajax({
                     url: queryURL,
                     method: "GET"
-                })
+                    }).then(function(response){
+                        var stringResponse= JSON.parse(JSON.stringify(response))
+                    console.log("*******")    
+                    console.log(stringResponse);
+                    console.log("*******")    
 
-            .then(function(response){
+                    var image = response.data;
+
+                    for(var i = 0; i < stringResponse.data.length; i++){
                         
-                console.log(response);
-
-                var image = response.data;
-
-                var heroImage = $("<img>");
-
-                heroImage.attr("src", image);
+                        var Movingimgurl =  stringResponse.data[i].images.downsized.url
                         
-                heroImage.attr("alt", "heroes");
+                        var StillImgUrl = stringResponse.data[i].images.downsized_still.url
+                        var heroImage = $("<img>");
 
-                $("#gifs-appear-here").prepend(heroImage);
-            });
+                        $(heroImage).addClass("gif");
 
-            });
+                        heroImage.attr("src", Movingimgurl);
+                        heroImage.attr("stillsrc", StillImgUrl)
+                       
+
+                        $("#gifs-appear-here").prepend(heroImage);  
+
+                    }
+                   
+                });  
+                
+                $(document).on("click", ".gif", function(){
+
+                    console.log("clicked class gif: ")
+                    
+                    var stillUrl= $(this).attr("stillsrc");
+                    console.log(stillUrl)
+                    $(this).attr("src", stillUrl)
+                
+            })
+
+                    })
+            
                 
                 renderButtons();
+
             </script>
         </body>
 </html>
